@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import Badge from '@mui/material/Badge';
 import { styled } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
@@ -19,10 +20,24 @@ export default function Header2() {
       
       
       <div className='inline-flex items-center flex-col '>
+=======
+import IconButton from "@mui/material/IconButton";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import PersonIcon from "@mui/icons-material/Person";
+import PrimarySearchAppBar from "../../ui/SearchBar";
+import Cart from "../../ui/Cart";
+
+// eslint-disable-next-line react/prop-types
+export default function Header2({cartItems, setCartItems}) {
+  return (
+    <div className="flex-wrap flex justify-between items-center w-[95%] mx-auto position-relative">
+      <div className="inline-flex items-center flex-col ">
+>>>>>>> 2cd736e (Fixed cart stying, closing out when clicking any button bug, and cart badge quantity)
         <ShoppingCartIcon />
         <p>E-COMMERCE</p>
       </div>
 
+<<<<<<< HEAD
 
       <PrimarySearchAppBar/>
 
@@ -47,4 +62,17 @@ export default function Header2() {
     </div>
   );
 
+=======
+      <PrimarySearchAppBar />
+
+      <div className="flex items-center justify-center fixed z-50 bg-red-200 top-44 right-0">
+        <IconButton aria-label="cart">
+          <PersonIcon />
+        </IconButton>
+
+        <Cart cartItems={cartItems} setCartItems={setCartItems}/>
+      </div>
+    </div>
+  );
+>>>>>>> 2cd736e (Fixed cart stying, closing out when clicking any button bug, and cart badge quantity)
 }

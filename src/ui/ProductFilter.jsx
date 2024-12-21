@@ -7,11 +7,19 @@ const categories = [
     },
     {
         id: 2,
+<<<<<<< HEAD
         name: "MEN",
     },
     {
         id: 3,
         name: "Women",
+=======
+        name: "Women",
+    },
+    {
+        id: 3,
+        name: "Men",
+>>>>>>> 2cd736e (Fixed cart stying, closing out when clicking any button bug, and cart badge quantity)
     },
     {
         id: 4,

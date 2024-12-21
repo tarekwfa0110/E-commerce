@@ -10,8 +10,13 @@ function Header3() {
       <BasicMenu></BasicMenu>
       
       
+<<<<<<< HEAD
       {useMediaQuery('(max-width:600px)') && <TemporaryDrawer anchor="right"><MenuIcon className="text-black" /></TemporaryDrawer>}
       {useMediaQuery('(min-width:600px)') && <TemporaryDrawer anchor="right"><MenuIcon className="text-black" /></TemporaryDrawer>}
+=======
+      {/* {useMediaQuery('(max-width:600px)') && <TemporaryDrawer anchor="right"><MenuIcon className="text-black" /></TemporaryDrawer>} */}
+      {/* {useMediaQuery('(min-width:600px)') && <TemporaryDrawer anchor="right"><MenuIcon className="text-black" /></TemporaryDrawer>} */}
+>>>>>>> 2cd736e (Fixed cart stying, closing out when clicking any button bug, and cart badge quantity)
       
     </div>
   );
