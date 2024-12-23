@@ -1,6 +1,13 @@
 import PropTypes from 'prop-types';
 import { useQuery } from '@tanstack/react-query';
-import fetchProducts from '../api/fetch';
+
+const fetchProducts = async () => {
+  const response = await fetch('/api/products'); 
+  if (!response.ok) {
+    throw new Error('Failed to fetch products');
+  }
+  return response.json();
+};
 
 const ProductDetails = ({ productId }) => {
 
@@ -26,7 +33,7 @@ const ProductDetails = ({ productId }) => {
   );
 };
 
-// Prop validation
+
 ProductDetails.propTypes = {
   productId: PropTypes.number.isRequired,
 };

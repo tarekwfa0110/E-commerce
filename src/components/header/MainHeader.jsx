@@ -1,24 +1,27 @@
-import Header1 from "./Header1";
-import Header2 from "./Header2";
+import PropTypes from "prop-types";
+import Header2 from "./FixedCartIcon";
 import Header3 from "./Header3";
 
-<<<<<<< HEAD
-function MainHeader() {
+function MainHeader({ cartItems, setCartItems }) {
     return (
-    <>
-        <Header1 />
-        <Header2 />
-=======
-// eslint-disable-next-line react/prop-types
-function MainHeader({cartItems, setCartItems}) {
-    return (
-    <>
-        <Header1 />
-        <Header2 cartItems={cartItems} setCartItems={setCartItems}/>
->>>>>>> 2cd736e (Fixed cart stying, closing out when clicking any button bug, and cart badge quantity)
-
-        <Header3 />
-    </>
+        <>
+            <Header2 cartItems={cartItems} setCartItems={setCartItems} />
+            <Header3 />
+        </>
     );
 }
+
+MainHeader.propTypes = {
+    cartItems: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.number.isRequired,
+            image: PropTypes.string.isRequired,
+            title: PropTypes.string.isRequired,
+            price: PropTypes.number.isRequired,
+            quantity: PropTypes.number.isRequired,
+        })
+    ).isRequired,
+    setCartItems: PropTypes.func.isRequired,
+};
+
 export default MainHeader;

@@ -9,8 +9,8 @@ import { MenuItem, Select } from '@mui/material';
 
 const Search = styled('div')(() => ({
     borderRadius: "20px",
-    backgroundColor: '#fff', // White background
-    border: '1px solid #ccc', // Light gray border
+    backgroundColor: '#fff',
+    border: '1px solid #ccc',
     display: 'flex',
     alignItems: 'center',
 

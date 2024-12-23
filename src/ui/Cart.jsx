@@ -1,11 +1,9 @@
+import PropTypes from "prop-types";
 import TemporaryDrawer from "./Drawer";
-import React from "react";
 import {
     IconButton,
     Typography,
     Button,
-    Box,
-    Stack,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Badge from "@mui/material/Badge";
@@ -23,7 +21,6 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 const Cart = ({ cartItems, setCartItems }) => {
     const CartItem = ({ item }) => {
-        // Add stopPropagation to prevent drawer from closing
         const handleQuantityChange = (e, delta) => {
             e.stopPropagation();
             setCartItems(prevItems => updateQuantity(prevItems, item.id, delta));
@@ -82,6 +79,16 @@ const Cart = ({ cartItems, setCartItems }) => {
         );
     };
 
+    CartItem.propTypes = {
+        item: PropTypes.shape({
+            id: PropTypes.number.isRequired,
+            image: PropTypes.string.isRequired,
+            title: PropTypes.string.isRequired,
+            price: PropTypes.number.isRequired,
+            quantity: PropTypes.number.isRequired,
+        }).isRequired,
+    };
+
     function updateQuantity(items, id, delta) {
         return items.map(item =>
             item.id === id ? { ...item, quantity: Math.max(1, item.quantity + delta) } : item
@@ -109,7 +116,7 @@ const Cart = ({ cartItems, setCartItems }) => {
                         ))}
                     </div>
 
-                    <div className="flex flex-col items-center p-4 gap-2 border-t border-gray-200 ">
+                    <div className="flex flex-col items-center p-4 gap-2 border-t border-gray-200">
                         <Button
                             variant="contained"
                             color="primary"
@@ -137,6 +144,19 @@ const Cart = ({ cartItems, setCartItems }) => {
             </IconButton>
         </TemporaryDrawer>
     );
+};
+
+Cart.propTypes = {
+    cartItems: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.number.isRequired,
+            image: PropTypes.string.isRequired,
+            title: PropTypes.string.isRequired,
+            price: PropTypes.number.isRequired,
+            quantity: PropTypes.number.isRequired,
+        })
+    ).isRequired,
+    setCartItems: PropTypes.func.isRequired,
 };
 
 export default Cart;
