@@ -13,7 +13,7 @@ const HeroGrid = () => {
             discount: "30% OFF",
             shipping: "Get Free Shipping on orders over $99.00",
             bgColor: "bg-gray-50", 
-            img: "../../../public/banner-15.jpg"
+            img: "/public/banner-15.jpg"
         },
         {
             title: "SUMMER COLLECTION",
@@ -21,7 +21,7 @@ const HeroGrid = () => {
             discount: "40% OFF",
             shipping: "Free Express Shipping",
             bgColor: "bg-gray-100",
-            img: "../../../public/banner-25.jpg"
+            img: "/public/banner-25.jpg"
         }
     ];
 
@@ -89,7 +89,7 @@ const HeroGrid = () => {
                 <div className="col-span-4 relative rounded-lg overflow-hidden">
                     <div className="relative h-[290px]">
                         <img
-                            src="../../../public/banner-17.jpg"
+                            src="/public/banner-17.jpg"
                             alt="New Arrivals"
                             className="w-full h-full object-cover"
                         />
@@ -122,7 +122,7 @@ const HeroGrid = () => {
                 <div className="col-span-4 relative rounded-lg overflow-hidden">
                     <div className="relative h-[290px]">
                         <img
-                            src="../../../public/banner-16.jpg"
+                            src="/public/banner-16.jpg"
                             alt="Gaming"
                             className="w-full h-full object-cover"
                         />
