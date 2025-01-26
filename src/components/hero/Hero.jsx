@@ -1,4 +1,3 @@
-
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import { Button } from '@mui/material';
@@ -12,8 +11,8 @@ const HeroGrid = () => {
             subtitle: "MEN",
             discount: "30% OFF",
             shipping: "Get Free Shipping on orders over $99.00",
-            bgColor: "bg-gray-50", 
-            img: "/public/banner-15.jpg"
+            bgColor: "bg-gray-50",
+            img: "/banner-15.jpg" // Corrected path
         },
         {
             title: "SUMMER COLLECTION",
@@ -21,7 +20,7 @@ const HeroGrid = () => {
             discount: "40% OFF",
             shipping: "Free Express Shipping",
             bgColor: "bg-gray-100",
-            img: "/public/banner-25.jpg"
+            img: "/banner-25.jpg" // Corrected path
         }
     ];
 
@@ -89,7 +88,7 @@ const HeroGrid = () => {
                 <div className="col-span-4 relative rounded-lg overflow-hidden">
                     <div className="relative h-[290px]">
                         <img
-                            src="/public/banner-17.jpg"
+                            src="/banner-17.jpg" // Corrected path
                             alt="New Arrivals"
                             className="w-full h-full object-cover"
                         />
@@ -122,7 +121,7 @@ const HeroGrid = () => {
                 <div className="col-span-4 relative rounded-lg overflow-hidden">
                     <div className="relative h-[290px]">
                         <img
-                            src="/public/banner-16.jpg"
+                            src="/banner-16.jpg" // Corrected path
                             alt="Gaming"
                             className="w-full h-full object-cover"
                         />
@@ -140,12 +139,13 @@ const HeroGrid = () => {
                                         color: '#1a2332',
                                         '&:hover': {
                                             backgroundColor: 'transparent',
-                                            textDecoration: 'underline'
-                                        }
+                                            textDecoration: 'underline',
+                                        },
                                     }}
                                 >
                                     Shop Now →
                                 </Button>
+
                             </div>
                         </div>
                     </div>
