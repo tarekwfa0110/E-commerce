@@ -2,18 +2,14 @@ import PropTypes from 'prop-types';
 
 function Feature({ icon, title, description }) {
     return (
-        <div className='flex justify-center items-center gap-5 text-xl'>
-            <div className=''>
+        <div className='flex items-center gap-3 sm:gap-4'>
+            <div className='text-primary-600'>
                 {icon}
             </div>
-            <div className="flex flex-col justify-center items-start">
-                <div>{title}</div>
-                <div className='font-light text-lg'>{description}</div>
+            <div className="flex flex-col">
+                <div className="text-sm sm:text-base font-medium">{title}</div>
+                <div className='text-xs sm:text-sm text-gray-600'>{description}</div>
             </div>
-            
-            {title !== "Payment" && (
-                <div className="h-16 w-[1px] bg-gray-200 ml-16" />
-            )}
         </div>
     );
 }

@@ -3,37 +3,24 @@ import { Button, CardActions, CardContent, Typography, Card } from "@mui/materia
 import BasicRating from "./Rating";
 import { useState } from "react";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
+import useCartStore from '../store/cartStore';
 
-function ProductCard({ product, setCartItems }) {
+function ProductCard({ product }) {
     const [isExpanded, setIsExpanded] = useState(false);
+    const addItem = useCartStore(state => state.addItem);
 
     const truncateText = (text, maxLength = 100) => {
         return text.length <= maxLength ? text : isExpanded ? text : `${text.slice(0, maxLength).trim()}...`;
     };
 
     const handleAddToCart = () => {
-        setCartItems((prevCartItems) => {
-            const existingItem = prevCartItems.find((item) => item.id === product.id);
-
-            if (existingItem) {
-                return prevCartItems.map((item) =>
-                    item.id === product.id
-                        ? { ...item, quantity: item.quantity + 1 }
-                        : item
-                );
-            }
-
-            return [
-                ...prevCartItems,
-                {
-                    id: product.id,
-                    image: product.image,
-                    title: product.title,
-                    price: product.price,
-                    quantity: 1,
-                },
-            ];
+        addItem({
+            id: product.id,
+            image: product.image,
+            title: product.title,
+            price: product.price,
+            quantity: 1,
         });
     };
 
@@ -45,32 +32,39 @@ function ProductCard({ product, setCartItems }) {
                 display: 'flex',
                 flexDirection: 'column',
                 position: 'relative',
-                borderRadius: 2,
+                borderRadius: { xs: 1, sm: 2 },
                 transition: 'transform 0.2s, box-shadow 0.2s',
                 '&:hover': {
-                    transform: 'translateY(-4px)',
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                    transform: { sm: 'translateY(-4px)' },
+                    boxShadow: { sm: '0 4px 12px rgba(0,0,0,0.1)' }
                 }
             }}
         >
             <Link
                 to={`/products/${product.id}`}
-                className="w-full pt-4 px-4 flex items-center justify-center"
-                style={{ aspectRatio: '1/1' }}
+                className="w-full pt-2 sm:pt-4 px-2 sm:px-4 flex items-center justify-center"
             >
-                <img
-                    src={product.image}
-                    alt={product.title}
-                    className="w-full h-full object-contain hover:scale-105 transition-transform duration-300 ease-in-out hover:border-2 hover:border-black hover:shadow-lg"
-                />
+                <div className="relative w-full aspect-square">
+                    <img
+                        src={product.image}
+                        alt={product.title}
+                        className="absolute inset-0 w-full h-full object-contain transition-transform duration-300 ease-in-out hover:scale-105"
+                    />
+                </div>
             </Link>
 
-            <CardContent className="flex-grow flex flex-col gap-2">
+            <CardContent 
+                sx={{
+                    flexGrow: 1,
+                    padding: { xs: 1.5, sm: 2 },
+                    '&:last-child': { paddingBottom: { xs: 1.5, sm: 2 } }
+                }}
+            >
                 <Typography
                     variant="h6"
                     component="h2"
                     sx={{
-                        fontSize: '1rem',
+                        fontSize: { xs: '0.9rem', sm: '1rem' },
                         fontWeight: 600,
                         lineHeight: 1.2,
                         height: '2.4em',
@@ -78,7 +72,8 @@ function ProductCard({ product, setCartItems }) {
                         textOverflow: 'ellipsis',
                         display: '-webkit-box',
                         WebkitLineClamp: 2,
-                        WebkitBoxOrient: 'vertical'
+                        WebkitBoxOrient: 'vertical',
+                        mb: 1
                     }}
                 >
                     {product.title}
@@ -87,7 +82,10 @@ function ProductCard({ product, setCartItems }) {
                 <Typography
                     variant="body2"
                     color="text.secondary"
-                    sx={{ minHeight: isExpanded ? 'auto' : '4.5em' }}
+                    sx={{
+                        fontSize: { xs: '0.8rem', sm: '0.875rem' },
+                        minHeight: isExpanded ? 'auto' : '4.5em'
+                    }}
                 >
                     {truncateText(product.description)}
                     {product.description.length > 100 && (
@@ -96,24 +94,34 @@ function ProductCard({ product, setCartItems }) {
                                 e.preventDefault();
                                 setIsExpanded(!isExpanded);
                             }}
-                            className="text-blue-500 hover:text-blue-600 text-sm mt-1 flex items-center gap-1"
+                            className="text-blue-500 hover:text-blue-600 text-xs sm:text-sm mt-1 flex items-center gap-1"
                         >
                             {isExpanded ? (
-                                <>Show less <ExpandLess /></>
+                                <>Show less <ExpandLess fontSize="small" /></>
                             ) : (
-                                <>Show more <ExpandMore /></>
+                                <>Show more <ExpandMore fontSize="small" /></>
                             )}
                         </button>
                     )}
                 </Typography>
             </CardContent>
 
-            <CardActions className="flex flex-col gap-3 p-4 pt-0">
+            <CardActions 
+                sx={{
+                    flexDirection: 'column',
+                    gap: 1.5,
+                    padding: { xs: 1.5, sm: 2 },
+                    paddingTop: 0
+                }}
+            >
                 <div className="w-full flex justify-between items-center">
                     <BasicRating stars={product.rating.rate} />
                     <Typography
                         variant="h6"
-                        className="font-semibold text-lg"
+                        sx={{
+                            fontWeight: 600,
+                            fontSize: { xs: '1rem', sm: '1.25rem' }
+                        }}
                     >
                         ${product.price.toFixed(2)}
                     </Typography>
@@ -121,12 +129,15 @@ function ProductCard({ product, setCartItems }) {
                 <Button
                     variant="contained"
                     fullWidth
-                    onClick={handleAddToCart}
+                    size="small"
                     sx={{
                         textTransform: 'none',
                         fontWeight: 600,
-                        borderRadius: 1.5
+                        borderRadius: 1.5,
+                        padding: { xs: '6px 12px', sm: '8px 16px' },
+                        fontSize: { xs: '0.875rem', sm: '1rem' }
                     }}
+                    onClick={handleAddToCart}
                 >
                     Add to Cart
                 </Button>
@@ -146,7 +157,6 @@ ProductCard.propTypes = {
             rate: PropTypes.number.isRequired,
         }).isRequired,
     }).isRequired,
-    setCartItems: PropTypes.func.isRequired,
 };
 
 export default ProductCard;

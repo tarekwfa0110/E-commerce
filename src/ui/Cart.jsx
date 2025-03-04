@@ -4,11 +4,15 @@ import {
     IconButton,
     Typography,
     Button,
+    Box,
+    Divider,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Badge from "@mui/material/Badge";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import CloseIcon from "@mui/icons-material/Close";
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
     "& .MuiBadge-badge": {
@@ -19,63 +23,97 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
     },
 }));
 
-const Cart = ({ cartItems, setCartItems }) => {
+const Cart = ({ cartItems, onUpdateQuantity, onRemoveItem }) => {
     const CartItem = ({ item }) => {
         const handleQuantityChange = (e, delta) => {
             e.stopPropagation();
-            setCartItems(prevItems => updateQuantity(prevItems, item.id, delta));
+            onUpdateQuantity(item.id, item.quantity + delta);
         };
 
         const handleRemove = (e) => {
             e.stopPropagation();
-            setCartItems(prevItems => prevItems.filter(i => i.id !== item.id));
+            onRemoveItem(item.id);
         };
 
         return (
-            <div className="flex items-center space-x-4 py-6 px-4 border-b border-gray-200 last:border-b-0">
-                <img
-                    src={item.image}
-                    alt={item.title}
-                    className="w-16 h-16 rounded-lg bg-gray-100 p-1 object-cover"
-                />
-                <div className="flex-1 min-w-0">
-                    <Typography variant="body1" className="font-semibold truncate">
-                        {item.title}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                        ${item.price} x {item.quantity}
-                    </Typography>
+            <Box sx={{ 
+                p: 2,
+                borderBottom: '1px solid',
+                borderColor: 'divider',
+                '&:last-child': {
+                    borderBottom: 'none'
+                }
+            }}>
+                <div className="flex gap-4">
+                    <div className="relative w-20 h-20">
+                        <img
+                            src={item.image}
+                            alt={item.title}
+                            className="absolute inset-0 w-full h-full rounded-lg object-contain bg-gray-50 p-2"
+                        />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                        <Typography 
+                            variant="subtitle1" 
+                            sx={{ 
+                                fontWeight: 600,
+                                mb: 0.5,
+                                display: '-webkit-box',
+                                WebkitLineClamp: 2,
+                                WebkitBoxOrient: 'vertical',
+                                overflow: 'hidden'
+                            }}
+                        >
+                            {item.title}
+                        </Typography>
+                        <Typography 
+                            variant="body2" 
+                            color="text.secondary"
+                            sx={{ mb: 1 }}
+                        >
+                            ${item.price.toFixed(2)}
+                        </Typography>
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                                <IconButton
+                                    size="small"
+                                    onClick={(e) => handleQuantityChange(e, -1)}
+                                    disabled={item.quantity <= 1}
+                                    sx={{ 
+                                        border: '1px solid',
+                                        borderColor: 'divider'
+                                    }}
+                                >
+                                    <RemoveIcon fontSize="small" />
+                                </IconButton>
+                                <Typography sx={{ minWidth: '24px', textAlign: 'center' }}>
+                                    {item.quantity}
+                                </Typography>
+                                <IconButton
+                                    size="small"
+                                    onClick={(e) => handleQuantityChange(e, 1)}
+                                    sx={{ 
+                                        border: '1px solid',
+                                        borderColor: 'divider'
+                                    }}
+                                >
+                                    <AddIcon fontSize="small" />
+                                </IconButton>
+                            </div>
+                            <Typography variant="subtitle2" color="primary" fontWeight={600}>
+                                ${(item.price * item.quantity).toFixed(2)}
+                            </Typography>
+                            <IconButton
+                                size="small"
+                                onClick={handleRemove}
+                                sx={{ color: 'error.main' }}
+                            >
+                                <CloseIcon fontSize="small" />
+                            </IconButton>
+                        </div>
+                    </div>
                 </div>
-                <div className="flex items-center space-x-2">
-                    <Button
-                        variant="outlined"
-                        color="inherit"
-                        size="small"
-                        onClick={(e) => handleQuantityChange(e, 1)}
-                        className="min-w-[32px] p-1 rounded-full"
-                    >
-                        +
-                    </Button>
-                    <Typography>{item.quantity}</Typography>
-                    <Button
-                        variant="outlined"
-                        color="inherit"
-                        size="small"
-                        onClick={(e) => handleQuantityChange(e, -1)}
-                        className="min-w-[32px] p-1 rounded-full"
-                    >
-                        -
-                    </Button>
-                    <IconButton
-                        color="inherit"
-                        size="small"
-                        onClick={handleRemove}
-                        className="ml-2"
-                    >
-                        <CloseIcon fontSize="small" />
-                    </IconButton>
-                </div>
-            </div>
+            </Box>
         );
     };
 
@@ -89,56 +127,120 @@ const Cart = ({ cartItems, setCartItems }) => {
         }).isRequired,
     };
 
-    function updateQuantity(items, id, delta) {
-        return items.map(item =>
-            item.id === id ? { ...item, quantity: Math.max(1, item.quantity + delta) } : item
-        );
-    }
+    const totalAmount = cartItems.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0
+    );
 
-    const totalAmount = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+    const totalItems = cartItems.reduce(
+        (sum, item) => sum + item.quantity,
+        0
+    );
 
     return (
         <TemporaryDrawer
             anchor="right"
-            cartItems={cartItems}
-            setCartItems={setCartItems}
             content={
-                <div className="flex flex-col h-screen">
-                    <div className="p-4 border-b border-gray-200">
-                        <Typography variant="h6" className="text-center font-semibold">
-                            {cartItems.length} {cartItems.length === 1 ? "item" : "items"}
+                <Box sx={{ 
+                    width: { xs: '100vw', sm: 400 },
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                }}>
+                    {/* Cart Header */}
+                    <Box sx={{ 
+                        p: 2, 
+                        borderBottom: '1px solid',
+                        borderColor: 'divider',
+                        bgcolor: 'background.paper',
+                    }}>
+                        <Typography variant="h6" component="h2">
+                            Shopping Cart ({totalItems} items)
                         </Typography>
-                    </div>
+                    </Box>
 
-                    <div className="flex-1 overflow-y-auto px-4">
-                        {cartItems.map((item) => (
-                            <CartItem key={item.id} item={item} />
-                        ))}
-                    </div>
+                    {/* Cart Items */}
+                    <Box sx={{ 
+                        flex: 1,
+                        overflowY: 'auto',
+                        bgcolor: 'background.default'
+                    }}>
+                        {cartItems.length === 0 ? (
+                            <Box sx={{
+                                height: '100%',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                p: 4,
+                                gap: 2
+                            }}>
+                                <ShoppingCartIcon sx={{ fontSize: 48, color: 'text.secondary' }} />
+                                <Typography variant="h6" color="text.secondary">
+                                    Your cart is empty
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary" textAlign="center">
+                                    Looks like you haven't added any items to your cart yet
+                                </Typography>
+                            </Box>
+                        ) : (
+                            cartItems.map((item) => (
+                                <CartItem key={item.id} item={item} />
+                            ))
+                        )}
+                    </Box>
 
-                    <div className="flex flex-col items-center p-4 gap-2 border-t border-gray-200">
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            fullWidth
-                            className="mb-3 py-3 rounded-lg capitalize"
-                        >
-                            Checkout Now (${totalAmount.toFixed(2)})
-                        </Button>
-                        <Button
-                            variant="outlined"
-                            color="primary"
-                            fullWidth
-                            className="py-2 rounded-lg capitalize"
-                        >
-                            View Cart
-                        </Button>
-                    </div>
-                </div>
+                    {/* Cart Footer */}
+                    {cartItems.length > 0 && (
+                        <Box sx={{ 
+                            p: 2,
+                            borderTop: '1px solid',
+                            borderColor: 'divider',
+                            bgcolor: 'background.paper',
+                        }}>
+                            <Box sx={{ mb: 2 }}>
+                                <div className="flex justify-between mb-2">
+                                    <Typography color="text.secondary">Subtotal:</Typography>
+                                    <Typography fontWeight={600}>${totalAmount.toFixed(2)}</Typography>
+                                </div>
+                                <div className="flex justify-between">
+                                    <Typography color="text.secondary">Shipping:</Typography>
+                                    <Typography color="success.main">Free</Typography>
+                                </div>
+                                <Divider sx={{ my: 2 }} />
+                                <div className="flex justify-between">
+                                    <Typography variant="h6">Total:</Typography>
+                                    <Typography variant="h6" color="primary.main">
+                                        ${totalAmount.toFixed(2)}
+                                    </Typography>
+                                </div>
+                            </Box>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                fullWidth
+                                size="large"
+                                sx={{ mb: 1 }}
+                            >
+                                Checkout Now
+                            </Button>
+                            <Button
+                                variant="outlined"
+                                color="primary"
+                                fullWidth
+                            >
+                                View Cart
+                            </Button>
+                        </Box>
+                    )}
+                </Box>
             }
         >
             <IconButton aria-label="cart">
-                <StyledBadge badgeContent={cartItems.reduce((total, item) => total + item.quantity, 0)} color="secondary">
+                <StyledBadge 
+                    badgeContent={totalItems}
+                    color="secondary"
+                >
                     <ShoppingCartIcon />
                 </StyledBadge>
             </IconButton>
@@ -156,7 +258,8 @@ Cart.propTypes = {
             quantity: PropTypes.number.isRequired,
         })
     ).isRequired,
-    setCartItems: PropTypes.func.isRequired,
+    onUpdateQuantity: PropTypes.func.isRequired,
+    onRemoveItem: PropTypes.func.isRequired,
 };
 
 export default Cart;

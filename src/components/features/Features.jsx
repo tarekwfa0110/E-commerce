@@ -28,13 +28,21 @@ const features = [
     }
 ];
 
-
 function Features() {
-  return (
-    <div className="flex items-center justify-between bg-white py-10 my-10 px-14">
-            {features.map( (feat) =>  <Feature  icon = {feat.icon} title={feat.title} description={feat.description}  key={feat.id}/> )}
-    </div>
-  )
+    return (
+        <div className="bg-white py-6 sm:py-10 my-4 sm:my-10 px-4 sm:px-14">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+                {features.map((feat) => (
+                    <Feature
+                        icon={feat.icon}
+                        title={feat.title}
+                        description={feat.description}
+                        key={feat.id}
+                    />
+                ))}
+            </div>
+        </div>
+    );
 }
 
-export default Features
+export default Features;
