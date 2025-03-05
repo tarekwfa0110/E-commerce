@@ -13,6 +13,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import { useNavigate } from 'react-router-dom';
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
     "& .MuiBadge-badge": {
@@ -24,6 +25,8 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 }));
 
 const Cart = ({ cartItems, onUpdateQuantity, onRemoveItem }) => {
+    const navigate = useNavigate();
+
     const CartItem = ({ item }) => {
         const handleQuantityChange = (e, delta) => {
             e.stopPropagation();
@@ -137,6 +140,17 @@ const Cart = ({ cartItems, onUpdateQuantity, onRemoveItem }) => {
         0
     );
 
+    const handleCheckout = () => {
+        if (cartItems.length === 0) {
+            return;
+        }
+        navigate('/checkout');
+    };
+
+    const handleViewCart = () => {
+        navigate('/cart');
+    };
+
     return (
         <TemporaryDrawer
             anchor="right"
@@ -221,6 +235,8 @@ const Cart = ({ cartItems, onUpdateQuantity, onRemoveItem }) => {
                                 fullWidth
                                 size="large"
                                 sx={{ mb: 1 }}
+                                onClick={handleCheckout}
+                                disabled={cartItems.length === 0}
                             >
                                 Checkout Now
                             </Button>
@@ -228,6 +244,7 @@ const Cart = ({ cartItems, onUpdateQuantity, onRemoveItem }) => {
                                 variant="outlined"
                                 color="primary"
                                 fullWidth
+                                onClick={handleViewCart}
                             >
                                 View Cart
                             </Button>

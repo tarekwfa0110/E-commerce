@@ -12,9 +12,9 @@ import { Route, Routes } from 'react-router-dom';
 
 // Lazy load pages
 const HomePage = lazy(() => import('./pages/HomePage'));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 const ProductDetailsPage = lazy(() => import('./pages/ProductDetailsPage'));
 const CheckoutPage = lazy(() => import('./pages/CheckoutPage'));
-const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 // Configure React Query
 const queryClient = new QueryClient({
